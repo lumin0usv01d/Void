@@ -1,0 +1,336 @@
+--[[ Library ]]--
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/lumin0usv01d/LuminousHub/main/Library"))()
+
+--[[ Race ]]--
+local race = "Standard"
+
+--[[ Hoop ]]--
+local hoop = "Standard"
+
+--[[ Orb ]]--
+local optionSpeed = 0
+local optionOrb = ""
+local optionCity = ""
+
+--[[ Rebirth ]]--
+local rebirthSuccessful = false
+local pendingRebirthTp = ""
+local selectedCity = ""
+local rebtextfinal = ""
+local rebamount = 0
+
+--[[ Services ]]--
+local Player = game:GetService("Players").LocalPlayer
+local HttpService = game:GetService("HttpService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local GroupService = game:GetService("GroupService")
+
+--[[ Functions ]]--
+local function teleportToBaseplate()
+    local baseplate = Instance.new("Part")
+    baseplate.Size = Vector3.new(20, 2, 20)
+    baseplate.Anchored = true
+    baseplate.Position = Vector3.new(0, 2000, 0)
+    baseplate.Parent = game.Workspace
+    game.Players.LocalPlayer.Character:MoveTo(baseplate.Position)
+end
+local function teleportBack()
+    game.Players.LocalPlayer.Character:MoveTo(Vector3.new(0, 0, 0))
+end
+game:GetService('ReplicatedStorage').raceInProgress.Changed:Connect(function()
+	if _G.AR == true then		
+		if game:GetService('ReplicatedStorage').raceInProgress.Value == true then
+			game:GetService('ReplicatedStorage').rEvents.raceEvent:FireServer("joinRace")
+		end
+	end
+end)
+game:GetService('ReplicatedStorage').raceStarted.Changed:Connect(function()
+	if _G.AR == true then
+		if game:GetService('ReplicatedStorage').raceStarted.Value == true then
+			for i, v in pairs(game:GetService('Workspace').raceMaps:GetChildren()) do
+				local OldFinishPosition = v.finishPart.CFrame
+				v.finishPart.CFrame = Player.Character.HumanoidRootPart.CFrame
+				wait()
+				v.finishPart.CFrame = OldFinishPosition
+			end
+		end
+		wait(1.5)
+	end
+end)
+
+--[[ Window ]]--
+local Window = Library:CreateWindow({
+	Name = "LuminousHub",
+	Tab = "General",
+	Image = "18859218762"
+})
+
+--[[ Tabs ]]--
+local Tab1 = Window:CreateTab({
+	Name = "General",
+})
+local Tab2 = Window:CreateTab({
+	Name = "Auto Farming",
+})
+local Tab3 = Window:CreateTab({
+	Name = "Teleporting",
+})
+local Tab4 = Window:CreateTab({
+	Name = "Pets",
+})
+local Tab5 = Window:CreateTab({
+	Name = "Crystals",
+})
+local Tab6 = Window:CreateTab({
+	Name = "Settings",
+})
+
+--[[ Sections ]]--
+local Section1 = Tab1:CreateSection()
+local Section2 = Tab1:CreateSection()
+
+--[[ Section 1 ]]--
+Section1:CreateSection({
+	Name = "Racing"
+})
+Section1:CreateDropdown({
+	Name = "Race Type",
+	Options = {"Standard","Advanced"},
+	Callback = function(ddrace)
+		if ddrace == "Standard" then
+			race = "Standard"
+		elseif ddrace == "Advanced" then
+			race = "Advanced"
+		end
+	end
+})
+Section1:CreateToggle({
+	Name = "Auto Racing",
+	State = false,
+	Callback = function(state)
+		if state then
+			if race == "Standard" then
+				_G.AR = true 
+			elseif race == "Advanced" then
+		 		_G.loop = true 
+				while _G.loop do 
+					wait()
+					local args = {
+						[1] = "joinRace"
+					}
+					game:GetService("ReplicatedStorage"):WaitForChild("rEvents"):WaitForChild("raceEvent"):FireServer(unpack(args))
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(48.3109131, 36.3147125, -8680.45312, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+					wait(0.3)
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1686.07495, 36.3147125, -5946.63428, -0.984812617, 0, 0.173621148, 0, 1, 0, -0.173621148, 0, -0.984812617)
+					wait(0.3)
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1001.33118, 36.3147125, -10986.2178, -0.996191859, 0, -0.0871884301, 0, 1, 0, 0.0871884301, 0, -0.996191859)
+					wait(0.3)
+				end 
+			end
+		else 
+			_G.AR = false 
+			_G.loop = false 
+		end
+	end
+})
+Section1:CreateDivider()
+Section1:CreateSection({
+	Name = "Hoops"
+})
+Section1:CreateDropdown({
+	Name = "Hoop Type",
+	Options = {"Standard","Advanced"},
+	Callback = function(ddhoop)
+		if ddhoop == "Standard" then
+			hoop = "Standard"
+		elseif ddhoop == "Advanced" then
+			hoop = "Advanced"
+		end
+	end
+})
+Section1:CreateToggle({
+	Name = "Auto Hoops",
+	State = false,
+	Callback = function(state)
+		if state then 
+			if hoop == "Standard" then
+				_G.loop = true 
+				teleportToBaseplate()
+				while _G.loop do 
+					wait()
+					for i,v in pairs(game:GetService("Workspace").Hoops:GetChildren()) do
+						firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+						wait()
+						firetouchinterest(v, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+					end
+				end 
+			elseif hoop == "Advanced" then
+				_G.loop = true 
+				teleportToBaseplate()
+				while _G.loop do 
+					wait()
+					local children = workspace.Hoops:GetChildren()
+					for i, child in ipairs(children) do
+						if child.Name == "Hoop" then
+							child.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end    
+					end
+				end 
+			end
+		else 
+			_G.AR = false 
+			_G.loop = false 
+			teleportBack()
+		end
+	end
+})
+Section1:CreateDivider()
+
+--[[ Section 2 ]]--
+Section2:CreateSection({
+	Name = "Rebirthing"
+})
+Section2:CreateBox({
+	Name = "Rebirth Stop Point",
+	Callback = function(rebamountbb)
+		rebamount = tonumber(rebamountbb) or 0
+	end
+})
+Section2:CreateToggle({
+	Name = "Auto Rebirth",
+	State = false,
+	Callback = function(state)
+		if state then 
+			_G.loop = true
+			while _G.loop do 
+				wait()
+				local success, err = pcall(function()
+					local rebirthsBefore = game.Players.LocalPlayer.leaderstats.Rebirths.Value
+					game:GetService("ReplicatedStorage").rEvents.rebirthEvent:FireServer("rebirthRequest")
+					wait(0.5)
+					local rebirthsAfter = game.Players.LocalPlayer.leaderstats.Rebirths.Value
+					if rebirthsAfter > rebirthsBefore then
+						rebirthSuccessful = true
+						wait(0.5)
+						rebirthSuccessful = false
+					end
+					if rebirthsAfter >= rebamount then
+						_G.loop = false
+					end
+				end)
+				if not success then
+					_G.loop = false
+				end
+			end 
+		else 
+			_G.loop = false 
+		end 
+	end
+})
+Section2:CreateDivider()
+Section2:CreateSection({
+	Name = "Miscellaneous"
+})
+Section2:CreateToggle({
+	Name = "Strengthen",
+	State = false,
+	Callback = function(state)
+		if state then 
+			local player = game.Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+			local newProperties = PhysicalProperties.new(30, 0.3, 0.5)
+			for _, part in ipairs(character:GetDescendants()) do
+				if part:IsA("BasePart") then
+					part.CustomPhysicalProperties = newProperties
+				end
+			end
+		else 
+			local player = game.Players.LocalPlayer
+			local character = player.Character or player.CharacterAdded:Wait()
+			for _, part in ipairs(character:GetDescendants()) do
+				if part:IsA("BasePart") then
+					part.CustomPhysicalProperties = nil
+				end
+			end
+		end
+	end
+})
+Section2:CreateBox({
+	Name = "FPS Limit",
+	Callback = function(fpsamountbb)
+		fpsamount = tonumber(fpsamountbb) or 40
+	end
+})
+Section2:CreateButton({
+	Name = "Apply FPS",
+	Callback = function()
+		RunService:Set3dRenderingEnabled(true)
+		setfpscap(fpsamount)
+	end
+})
+Section2:CreateDivider()
+
+--[[
+
+Section:CreateLabel({
+	Name = "Label"
+})
+
+Section:CreateButton({
+	Name = "Button",
+	Callback = function()
+
+	end
+})
+
+Section:CreateToggle({
+	Name = "Toggle",
+	State = false,
+	Callback = function(state)
+
+	end
+})
+
+Section:CreateToggle({
+	Name = "Toggle",
+	State = true,
+	Callback = function(state)
+
+	end
+})
+
+Section2:CreateSlider({
+	Name = "Slider",
+	Min = 5,
+	Max = 225,
+	Callback = function(value)
+
+	end
+})
+
+Section2:CreateDropdown({
+	Name = "Dropdown",
+	Options = {"Luminous","Hub","Made","By lumin0us.v01d"},
+	Callback = function(selected)
+
+	end
+})
+
+Section2:CreateBox({
+	Name = "Box",
+	Callback = function(input)
+
+	end
+})
+
+Section2:CreateSection({
+	Name = "Section"
+})
+
+]]--
+
+Library:CreateNotification({
+	Description = "Welcome to LuminousHub!",
+	Time = 5
+})
