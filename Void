@@ -89,7 +89,7 @@ local Tab6 = Window:CreateTab({
 
 --[[ Sections ]]--
 local Section1 = Tab1:CreateSection()
-local Section2 = Tab2:CreateSection()
+local Section2 = Tab1:CreateSection()
 
 --[[ Section 1 ]]--
 Section1:CreateSection({
@@ -196,7 +196,7 @@ Section2:CreateBox({
 		rebamount = tonumber(rebamountbb) or 0
 	end
 })
-Section:CreateToggle({
+Section2:CreateToggle({
 	Name = "Auto Rebirth",
 	State = false,
 	Callback = function(state)
@@ -230,7 +230,7 @@ Section:CreateToggle({
 Section2:CreateSection({
 	Name = "Miscellaneous"
 })
-Section:CreateToggle({
+Section2:CreateToggle({
 	Name = "Strengthen",
 	State = false,
 	Callback = function(state)
